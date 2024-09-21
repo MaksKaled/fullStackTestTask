@@ -17,7 +17,48 @@ async function addMovie(req,res){
     }catch(error){
         res.status(500).json({message:'ошибка при добавлении фильма: ',error})
     }
-        
 }
 
-module.exports = {getMovies,addMovie}
+async function deleteMovie(req,res){
+    const {id} = req.params;
+    
+    try {
+        await movieModel.deleteMovie(id);
+        res.status(204).send()
+    } catch (error) {
+        res.status(500).json({message:"ошибка при попытке удалить фильм",error})
+    }
+}
+
+async function updateMovie(req,res){
+    const {id} = req.params;
+    const {title,release_date,budget,duration_minutes,director_id} = req.body;
+
+    if(!title || !release_date || !budget || !duration_minutes || !director_id){
+        return res.status(400).json({message:'не все поля переданы'})
+    }
+    try {
+        await movieModel.updateMovie(title,release_date,budget,duration_minutes,director_id,id);
+        res.status(200).json({message:'фильм успешно обновлен!'})
+    } catch (error) {
+        res.status(500).json({message:'ошибка при обновлении фильма',error})
+    }
+}
+
+async function patchMovie(req,res) {
+    const {id} = req.params;
+    const updates = req.body;
+
+    try {
+        const isMovieExists = await movieModel.fetchMoviesFromDB(id);
+        if(!isMovieExists){
+            return res.status(404).json({message:'фильм не найден'})
+        }
+        await movieModel.patchMovie(id,updates);
+        res.status(200).json({message:'фильм успешно изменен'})
+    } catch (error) {
+        res.status(500).json({message:'ошибка при изменении фильма',error})
+    }
+}
+
+module.exports = {getMovies,addMovie,deleteMovie,updateMovie,patchMovie}
