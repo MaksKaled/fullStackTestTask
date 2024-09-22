@@ -4,6 +4,11 @@ async function fetchMoviesFromDB(){
      return await db.any('select * from movies');
 }
 
+async function fetchMovieByID(id){
+    return await db.one('select * from movies where id = $1',
+        [id]);
+}
+
 async function addMovie(title, releaseDate, budget, durationMinutes, directorId){
     return await db.none('INSERT INTO movies(title, release_date, budget, duration_minutes, director_id) VALUES($1, $2, $3, $4, $5)',
         [title, releaseDate, budget, durationMinutes, directorId]);
@@ -40,5 +45,6 @@ module.exports = {
     addMovie,
     deleteMovie,
     updateMovie,
-    patchMovie
+    patchMovie,
+    fetchMovieByID
 }

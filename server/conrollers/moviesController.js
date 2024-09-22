@@ -9,6 +9,16 @@ async function getMovies(req,res){
     }
 }
 
+async function getMovieById(req,res){
+    const {id} = req.params;
+    try {
+        const movie = await movieModel.fetchMovieByID(id)
+        res.json(movie)
+    } catch (error) {
+        res.status(500).json({message:'Фильм не найден'})
+    }
+}
+
 async function addMovie(req,res){
     const {title,release_date,budget,duration_minutes,director_id} = req.body;
     try {
@@ -61,4 +71,4 @@ async function patchMovie(req,res) {
     }
 }
 
-module.exports = {getMovies,addMovie,deleteMovie,updateMovie,patchMovie}
+module.exports = {getMovies,addMovie,deleteMovie,updateMovie,patchMovie,getMovieById}
