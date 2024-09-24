@@ -15,7 +15,7 @@ async function addMovie(title, releaseDate, budget, durationMinutes, directorId)
 }
 
 async function deleteMovie(id){
-    return await db.none('delete from movies where id = $1',[id])
+    return await db.none('delete from movies where id = $1',id)
 }
 
 async function updateMovie(title, releaseDate, budget, durationMinutes, directorId,id){
