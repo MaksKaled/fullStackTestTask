@@ -5,8 +5,8 @@ const moviesRouter = require('./routes/movies')
 const directorsRouter = require('./routes/directors')
 app.use(express.json());
 
-app.use('/movies',moviesRouter)
-app.use('/directors',directorsRouter)
+app.use('/api/movies',moviesRouter)
+app.use('/api/directors',directorsRouter)
 
 
 app.listen(PORT,()=>{

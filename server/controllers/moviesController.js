@@ -5,7 +5,7 @@ async function getMovies(req,res){
         const movies = await movieModel.fetchMoviesFromDB();
         res.json(movies);
     } catch (error) {
-        res.status(500).json({message: 'ошибка при получении фильмов',error})
+        res.status(500).json({message: 'error in receiving movie',error})
     }
 }
 
@@ -15,7 +15,7 @@ async function getMovieById(req,res){
         const movie = await movieModel.fetchMovieByID(id)
         res.json(movie)
     } catch (error) {
-        res.status(500).json({message:'Фильм не найден'})
+        res.status(500).json({message:'Movie not found'})
     }
 }
 
@@ -23,9 +23,9 @@ async function addMovie(req,res){
     const {title,release_date,budget,duration_minutes,director_id} = req.body;
     try {
         await movieModel.addMovie(title,release_date,budget,duration_minutes,director_id);
-        res.status(201).json({message:'фильм успешно добавлен!'})
+        res.status(201).json({message:'Movie added successfully!'})
     }catch(error){
-        res.status(500).json({message:'ошибка при добавлении фильма: ',error})
+        res.status(500).json({message:'error adding movie: ',error})
     }
 }
 
@@ -36,7 +36,7 @@ async function deleteMovie(req,res){
         await movieModel.deleteMovie(id);
         res.status(204).send()
     } catch (error) {
-        res.status(500).json({message:"ошибка при попытке удалить фильм",error})
+        res.status(500).json({message:"error attempting to delete movie",error})
     }
 }
 
@@ -45,13 +45,13 @@ async function updateMovie(req,res){
     const {title,release_date,budget,duration_minutes,director_id} = req.body;
 
     if(!title || !release_date || !budget || !duration_minutes || !director_id){
-        return res.status(400).json({message:'не все поля переданы'})
+        return res.status(400).json({message:'not all fields were provided'})
     }
     try {
         await movieModel.updateMovie(title,release_date,budget,duration_minutes,director_id,id);
-        res.status(200).json({message:'фильм успешно обновлен!'})
+        res.status(200).json({message:'Movie updated successfully!'})
     } catch (error) {
-        res.status(500).json({message:'ошибка при обновлении фильма',error})
+        res.status(500).json({message:'error updating movie',error})
     }
 }
 
@@ -62,12 +62,12 @@ async function patchMovie(req,res) {
     try {
         const isMovieExists = await movieModel.fetchMoviesFromDB(id);
         if(!isMovieExists){
-            return res.status(404).json({message:'фильм не найден'})
+            return res.status(404).json({message:'movie not found'})
         }
         await movieModel.patchMovie(id,updates);
-        res.status(200).json({message:'фильм успешно изменен'})
+        res.status(200).json({message:'Movie patched successfully'})
     } catch (error) {
-        res.status(500).json({message:'ошибка при изменении фильма',error})
+        res.status(500).json({message:'error patching movie',error})
     }
 }
 
