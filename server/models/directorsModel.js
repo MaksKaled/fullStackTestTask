@@ -1,7 +1,14 @@
 const db = require('../db')
 
-async function fetchDirectorsFromDB() {
-    return await db.any('select * from directors');
+async function fetchDirectorsFromDB(limit,offset) {
+
+    const directors = await db.any('select * from directors order by id limit $1 offset $2',[limit,offset]);
+    const totalCount = await db.one('select count(*) from directors');
+
+    return{
+        data:directors,
+        total:parseInt(totalCount.count)
+    }
 }
 
 async function fetchDirectorByID(id){

@@ -2,8 +2,9 @@ const { validationResult } = require('express-validator');
 const directorModel = require('../models/directorsModel');
 
 async function getDirectors(req,res){
+    const {limit = 10, offset = 0} = req.query; 
     try {
-        const result = await directorModel.fetchDirectorsFromDB();
+        const result = await directorModel.fetchDirectorsFromDB(limit,offset);
     res.json(result)
     } catch (error) {
         res.status(500).json({message: 'error retrieving directors',error})

@@ -1,0 +1,16 @@
+
+  
+.directors-table {
+  height: 60vh; 
+  width: 100%; 
+  max-width: 80%; 
+}
+
+.ag-theme-alpine .ag-cell {
+  font-size: 12px;
+}
+
+.ag-theme-alpine .ag-header-cell {
+
+  font-size: 11px;
+}

@@ -4,6 +4,7 @@
     "dev": "nodemon server.js"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.21.0",
     "express-validator": "^7.2.0",
     "pg-promise": "^11.9.1"
