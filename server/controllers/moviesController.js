@@ -1,4 +1,5 @@
 const movieModel = require('../models/moviesModel');
+const { validationResult } = require('express-validator');
 
 async function getMovies(req,res){
     try {
@@ -20,6 +21,12 @@ async function getMovieById(req,res){
 }
 
 async function addMovie(req,res){
+
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()})
+    }
+
     const {title,release_date,budget,duration_minutes,director_id} = req.body;
     try {
         await movieModel.addMovie(title,release_date,budget,duration_minutes,director_id);
@@ -41,6 +48,12 @@ async function deleteMovie(req,res){
 }
 
 async function updateMovie(req,res){
+
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()})
+    }
+
     const {id} = req.params;
     const {title,release_date,budget,duration_minutes,director_id} = req.body;
 
@@ -56,6 +69,12 @@ async function updateMovie(req,res){
 }
 
 async function patchMovie(req,res) {
+
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()})
+    }
+    
     const {id} = req.params;
     const updates = req.body;
 
