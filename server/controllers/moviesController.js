@@ -2,8 +2,10 @@ const movieModel = require('../models/moviesModel');
 const { validationResult } = require('express-validator');
 
 async function getMovies(req,res){
+    const {limit,offset} = req.query;
+
     try {
-        const movies = await movieModel.fetchMoviesFromDB();
+        const movies = await movieModel.fetchMoviesFromDB(limit,offset);
         res.json(movies);
     } catch (error) {
         res.status(500).json({message: 'error in receiving movie',error})

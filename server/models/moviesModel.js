@@ -1,7 +1,21 @@
 const db = require('../db')
 
-async function fetchMoviesFromDB(){
-     return await db.any('select * from movies');
+async function fetchMoviesFromDB(limit,offset){
+    
+    let query = 'select * from movies order by id offset $1';
+    const params = [offset];
+
+    if(limit !== 'all'){
+        query += ' limit $2';
+        params.push(limit)
+    }
+     const movies = await db.any(query,params);
+     const totalCount = await db.one('select count(*) from movies');
+
+     return{
+        data:movies,
+        total:parseInt(totalCount.count)
+     }
 }
 
 async function fetchMovieByID(id){

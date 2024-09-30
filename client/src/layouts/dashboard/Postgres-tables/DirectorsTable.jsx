@@ -21,7 +21,7 @@ function DirectorsTable() {
           }
     },
     { headerName: 'nationality', field: 'nationality',width: 100 },
-    { headerName: 'experience Years', field: 'experience_years',width: 130 },
+    { headerName: 'experience Years', field: 'experience_years',width: 100 },
     { headerName: 'rating', field: 'rating',width: 70 }
   ];
 
@@ -71,4 +71,4 @@ function DirectorsTable() {
   );
 }
 
-export default DirectorsTable;
+export default React.memo(DirectorsTable);
