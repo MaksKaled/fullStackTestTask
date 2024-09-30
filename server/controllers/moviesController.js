@@ -31,8 +31,8 @@ async function addMovie(req,res){
 
     const {title,release_date,budget,duration_minutes,director_id} = req.body;
     try {
-        await movieModel.addMovie(title,release_date,budget,duration_minutes,director_id);
-        res.status(201).json({message:'Movie added successfully!'})
+        const newMovie = await movieModel.addMovie(title,release_date,budget,duration_minutes,director_id);
+        res.status(201).json({message:'Movie added successfully!',movie:newMovie})
     }catch(error){
         res.status(500).json({message:'error adding movie: ',error})
     }

@@ -13,10 +13,12 @@ import DirectorsTable from "./Postgres-tables/DirectorsTable";
 import MoviesTable from "./Postgres-tables/MoviesTable";
 
 import { useState,useEffect } from "react";
+import AddMovieForm from "./Postgres-tables/forms/AddMovieForm";
 
 function Dashboard() {
   const[selectedMovieId,setSelectedMovieId] = useState(null);
   const[movies,setMovies] = useState([]);
+  const [showAddMovieForm,setShowAddMovieForm] = useState(false);
   
   const fetchMovies = async () =>{
     const response = await fetch('http://localhost:3000/api/movies/?limit=all')
@@ -26,7 +28,11 @@ function Dashboard() {
   }
 
   const handleAddMovie = async () => {
-    
+    setShowAddMovieForm(true)
+  }
+  const handleMovieAdded = (newMovie) =>{
+    setMovies((prevMovies) => [...prevMovies,newMovie])
+    setShowAddMovieForm(false)
   }
   const handleEditMovie = async () => {
 
@@ -68,6 +74,11 @@ function Dashboard() {
                   <Button variant="contained" color="secondary" onClick={handleEditMovie}>Изменить фильм</Button>
                   <Button variant="contained" color="error" onClick={handleDeleteMovie} disabled={selectedMovieId === null}>Удалить фильм</Button>
                 </SoftBox>
+                <AddMovieForm 
+                  open={showAddMovieForm} 
+                  onClose={() => setShowAddMovieForm(false)} 
+                  onMovieAdded={handleMovieAdded} 
+                />
                 <MoviesTable movies={movies} setSelectedMovieId={setSelectedMovieId}/>
               </Grid>
             </Grid>
