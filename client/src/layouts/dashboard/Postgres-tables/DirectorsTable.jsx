@@ -15,10 +15,6 @@ function DirectorsTable() {
             if (params.value) {
               const luxonDateTime = DateTime.fromISO(params.value).setZone('local');
               return luxonDateTime.toLocaleString(DateTime.DATE_SHORT)
-              // const date = new Date(params.value);
-              // if (!isNaN(date.getTime())) {
-              //   return date.toISOString().split('T')[0]; 
-              // }
             }
             return ''; 
           }
