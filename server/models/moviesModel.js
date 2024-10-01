@@ -19,8 +19,13 @@ async function fetchMoviesFromDB(limit,offset){
 }
 
 async function fetchMovieByID(id){
-    return await db.one('select * from movies where id = $1',
-        [id]);
+
+    const movie = await db.one('select * from movies where id = $1',[id]);
+
+    console.log('полученный фильм: ',movie)
+    
+    return movie
+    
 }
 
 async function addMovie(title, releaseDate, budget, durationMinutes, directorId){

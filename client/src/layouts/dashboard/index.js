@@ -14,29 +14,52 @@ import MoviesTable from "./Postgres-tables/MoviesTable";
 
 import { useState,useEffect } from "react";
 import AddMovieForm from "./Postgres-tables/forms/AddMovieForm";
+import EditMovieForm from "./Postgres-tables/forms/EditMovieForm";
+import { DateTime } from 'luxon';
 
 function Dashboard() {
   const[selectedMovieId,setSelectedMovieId] = useState(null);
   const[movies,setMovies] = useState([]);
-  const [showAddMovieForm,setShowAddMovieForm] = useState(false);
+  const[showAddMovieForm,setShowAddMovieForm] = useState(false);
+  const[showEditMovieForm,setShowEditMovieForm] = useState(false)
   
-  const fetchMovies = async () =>{
-    const response = await fetch('http://localhost:3000/api/movies/?limit=all')
-    const result = await response.json();
-    console.log(result.data)
-    setMovies(result.data)
-  }
+  const fetchMovies = async () => {
+    try {
+        const response = await fetch('http://localhost:3000/api/movies/?limit=all');
+        if (!response.ok) {
+            throw new Error(`ошибка сети: ${response.status} ${response.statusText}`);
+        }
+        const result = await response.json();
+
+        
+        const updatedMovies = result.data.map(movie => ({
+            ...movie,
+            release_date: DateTime.fromISO(movie.release_date, { zone: 'utc' }).toLocal().toISODate(),
+        }));
+
+        console.log(updatedMovies);
+        setMovies(updatedMovies);
+    } catch (error) {
+        console.error('ошибка при получении фильмов: ', error);
+    }
+};
 
   const handleAddMovie = async () => {
     setShowAddMovieForm(true)
   }
+
   const handleMovieAdded = (newMovie) =>{
     setMovies((prevMovies) => [...prevMovies,newMovie])
     setShowAddMovieForm(false)
   }
-  const handleEditMovie = async () => {
 
-  }
+const handleMovieUpdated = (updatedMovie) => {
+  setMovies((prevMovies) =>
+      prevMovies.map((movie) =>
+          movie.id === updatedMovie.id ? updatedMovie : movie
+      )
+  );
+};
 
   const handleDeleteMovie = async () => {
     if(!selectedMovieId) return;
@@ -71,13 +94,20 @@ function Dashboard() {
               <Grid item xs={12} md={6}>
               <SoftBox mb={2} display="flex" justifyContent="space-between">
                   <Button variant="contained" color="primary" onClick={handleAddMovie}>Добавить фильм</Button>
-                  <Button variant="contained" color="secondary" onClick={handleEditMovie}>Изменить фильм</Button>
+                  <Button variant="contained" color="secondary" onClick={() => setShowEditMovieForm(true)} disabled={selectedMovieId === null}>Изменить фильм</Button>
                   <Button variant="contained" color="error" onClick={handleDeleteMovie} disabled={selectedMovieId === null}>Удалить фильм</Button>
                 </SoftBox>
                 <AddMovieForm 
                   open={showAddMovieForm} 
                   onClose={() => setShowAddMovieForm(false)} 
                   onMovieAdded={handleMovieAdded} 
+                />
+
+                <EditMovieForm
+                  open={showEditMovieForm}
+                  onClose={() => setShowEditMovieForm(false)}
+                  movieId={selectedMovieId} 
+                  onMovieUpdated={handleMovieUpdated}
                 />
                 <MoviesTable movies={movies} setSelectedMovieId={setSelectedMovieId}/>
               </Grid>

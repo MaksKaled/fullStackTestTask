@@ -3,6 +3,7 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import './tables.css'
+import { DateTime } from 'luxon';
 
 function DirectorsTable() {
   const columnDefs = [
@@ -12,10 +13,12 @@ function DirectorsTable() {
         valueFormatter: (params) => {
             
             if (params.value) {
-              const date = new Date(params.value);
-              if (!isNaN(date.getTime())) {
-                return date.toISOString().split('T')[0]; 
-              }
+              const luxonDateTime = DateTime.fromISO(params.value).setZone('local');
+              return luxonDateTime.toLocaleString(DateTime.DATE_SHORT)
+              // const date = new Date(params.value);
+              // if (!isNaN(date.getTime())) {
+              //   return date.toISOString().split('T')[0]; 
+              // }
             }
             return ''; 
           }

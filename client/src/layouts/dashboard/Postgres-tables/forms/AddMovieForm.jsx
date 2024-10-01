@@ -60,7 +60,7 @@ const AddMovieForm = ({ open, onClose, onMovieAdded }) => {
                 <IconButton
                     aria-label="close"
                     onClick={onClose}
-                    sx={{ position: 'absolute', right: 8, top: 8, color: (theme) => theme.palette.grey[500] }}
+                    sx={{ position: 'absolute', right: 8, top: 8, color: (theme) => theme.palette.grey[5000] }}
                 >
                     <CloseIcon />
                 </IconButton>

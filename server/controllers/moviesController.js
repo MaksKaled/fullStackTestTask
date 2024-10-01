@@ -64,14 +64,15 @@ async function updateMovie(req,res){
     }
     try {
         await movieModel.updateMovie(title,release_date,budget,duration_minutes,director_id,id);
-        res.status(200).json({message:'Movie updated successfully!'})
+        const updatedMovie = await movieModel.fetchMovieByID(id)
+        res.status(200).json({message:'Movie updated successfully!',movie:updatedMovie})
     } catch (error) {
         res.status(500).json({message:'error updating movie',error})
     }
 }
 
 async function patchMovie(req,res) {
-
+    
     const errors = validationResult(req);
     if(!errors.isEmpty()){
         return res.status(400).json({errors:errors.array()})
@@ -79,15 +80,21 @@ async function patchMovie(req,res) {
     
     const {id} = req.params;
     const updates = req.body;
-
+    console.log('полученные данные:',updates)
     try {
         const isMovieExists = await movieModel.fetchMoviesFromDB(id);
         if(!isMovieExists){
             return res.status(404).json({message:'movie not found'})
         }
         await movieModel.patchMovie(id,updates);
-        res.status(200).json({message:'Movie patched successfully'})
+
+        const updatedMovie = await movieModel.fetchMovieByID(id);
+        
+        res.status(200).json({message:'Movie patched successfully',movie:{...updatedMovie,
+            release_date: updatedMovie.release_date
+        }})
     } catch (error) {
+        console.error('error details: ',error)
         res.status(500).json({message:'error patching movie',error})
     }
 }
