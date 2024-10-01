@@ -1,0 +1,22 @@
+
+  
+.directors-table {
+  height: 60vh; 
+  width: 100%; 
+  max-width: 100%; 
+}
+
+.ag-theme-alpine .ag-cell {
+  font-size: 12px;
+}
+
+.ag-theme-alpine .ag-header-cell {
+
+  font-size: 11px;
+}
+
+.movies-table{
+  height: 60vh;
+  width: 100%;
+  max-width: 100%;
+}
